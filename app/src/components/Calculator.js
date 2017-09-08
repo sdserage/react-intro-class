@@ -9,8 +9,10 @@ class Calculator extends Component {
       header: "Scott's Calculator",
       displayNum: "0",
       operator: "",
-      tempNum: 0
+      tempNum: 0,
+      placeHolderDisplay: false
     }
+    this.updateDisplay = this.updateDisplay.bind(this);
   }
 
   headerChanged(newValue){
@@ -25,9 +27,12 @@ class Calculator extends Component {
     // Makes sure to clear the place holder '0' for the first entry
     // Also prevents only zeros from concatenating
     // Only takes 13 characters won't concatenate past this
-    let display = (this.state.displayNum === '0') ? num : this.state.displayNum +num ;
+
+    let display = (this.state.displayNum === '0' || this.state.placeHolderDisplay) ? num : this.state.displayNum +num ;
+
     this.setState({
-      displayNum: (this.state.displayNum.length < 13) ? display : this.state.displayNum
+      displayNum: (this.state.displayNum.length < 13) ? display : this.state.displayNum,
+      placeHolderDisplay: false
     })
   }
 
@@ -61,7 +66,10 @@ class Calculator extends Component {
         break;
     }
     this.setState({
-      displayNum: result
+      displayNum: String(result),
+      placeHolderDisplay: true,
+      //tempNum: 0, //allows one to use the current total as the next value to calculate
+      operator: ""
     })
   }
 
@@ -70,11 +78,13 @@ class Calculator extends Component {
       header: "Scott's Calculator",
       displayNum: "0",
       operator: "",
-      tempNum: 0
+      tempNum: 0,
+      placeHolderDisplay: false
     })
   }
 
   render(){
+    console.log(this.state)
     return (
       <div id="calculator-container">
         <input id="header-input" onChange={ (e)=> this.headerChanged(e.target.value) }/>
